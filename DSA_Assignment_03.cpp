@@ -25,6 +25,14 @@ public:
         this->status = status;
     }
 
+    void addData(string patientId, string name, string admissionDate, string diseaseDiagnosis, string status){
+        this->patientId = patientId;
+        this->name = name;
+        this->admissionDate = admissionDate;
+        this->diseaseDiagnosis = diseaseDiagnosis;
+        this->status = status;
+    }
+
     void print(){
         cout << "\t\n --- Patient Record --- \n";
         cout << "\t" << patientId << endl;
