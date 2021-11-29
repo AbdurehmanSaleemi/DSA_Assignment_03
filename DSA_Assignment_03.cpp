@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 class PatientData{
@@ -51,7 +52,6 @@ public:
     }
 
     void print(){
-        cout << "\t\n ------------ Patient Record ----------- \n";
         cout << patientId << endl;
         cout << name << endl;
         cout << admissionDate << endl;
@@ -126,15 +126,15 @@ private:
             return NULL;
         }
         if(patientId < node->data.getPatientId()){
-            node->left = searchAndMoveUp(node->left, patientId);
+            node->left = searchAndMoveUp(node->left, patientId);    //move left
             if(node->left != NULL && node->left->data.getPatientId() < node->data.getPatientId()){
-                node = rightRotate(node);
+                node = rightRotate(node);   //right rotation
             }
         }
         else if(patientId > node->data.getPatientId()){
-            node->right = searchAndMoveUp(node->right, patientId);
+            node->right = searchAndMoveUp(node->right, patientId);      //move right
             if(node->right != NULL && node->right->data.getPatientId() > node->data.getPatientId()){
-                node = leftRotate(node);
+                node = leftRotate(node);        //left rotation
             }
         }
         return node;
@@ -209,7 +209,7 @@ public:
     }
 
     void searchAndMoveUp(string patientId){
-        root = searchAndMoveUp(root, patientId);
+        root = searchAndMoveUp(this->root, patientId);
     }
 
     void printInorder(){
@@ -226,24 +226,21 @@ public:
 
 
 int main(){
-    PatientData pat[2];
-    for (int i = 0; i < 2; i++)
-    {
-        string id = to_string(i);
-        pat[i].addData(id, "abc", "12-01-10", "type ezz after losing badly :'()", "Discharged");
-        //pat[i].print();
-    }
+    PatientData patientData;
+    PatientData patientDataTemp[10];
 
-    HospitalData hos;
-    for (int i = 0; i < 2; i++)
-    {
-        hos.addPatient(pat[i]);
+    patientDataTemp[0] = PatientData("P001", "John", "01/01/2020", "Fever", "Admitted");
+    patientDataTemp[1] = PatientData("P002", "Mary", "02/02/2020", "Cancer", "Admitted");
+    patientDataTemp[2] = PatientData("P003", "Peter", "03/03/2020", "Heart", "Admitted");
+    patientDataTemp[3] = PatientData("P004", "Linda", "04/04/2020", "Stomach", "Admitted");
+    patientDataTemp[4] = PatientData("P005", "John", "05/05/2020", "Fever", "Admitted");
+    patientDataTemp[5] = PatientData("P006", "Mary", "06/06/2020", "Cancer", "Admitted");
+    HospitalData *hospitalData = new HospitalData();
+
+    for(int i = 0; i < 5; i++){
+        hospitalData->addPatient(patientDataTemp[i]);
     }
-    //hos.searchPatient("0");
-    //hos.searchPatient("4");
-    hos.searchAndMoveUp("1");
-    hos.searchPatient("0");
-    hos.printInorder();
-    hos.deletePatient("0");
-    hos.printInorder();
+    hospitalData->printInorder();
+    hospitalData->searchAndMoveUp("P002");
+    hospitalData->printInorder();
 }
