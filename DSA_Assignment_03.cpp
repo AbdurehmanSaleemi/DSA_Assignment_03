@@ -213,12 +213,13 @@ int main(){
     PatientData patientDataTemp[10];
     bool isRunning = true;
 
-    patientDataTemp[0] = PatientData("P001", "John", "01/01/2020", "Fever", "Admitted");
-    patientDataTemp[1] = PatientData("P002", "Mary", "02/02/2020", "Cancer", "Admitted");
-    patientDataTemp[2] = PatientData("P003", "Peter", "03/03/2020", "Heart", "Admitted");
-    patientDataTemp[3] = PatientData("P004", "Linda", "04/04/2020", "Stomach", "Admitted");
-    patientDataTemp[4] = PatientData("P005", "John", "05/05/2020", "Fever", "Admitted");
-    patientDataTemp[5] = PatientData("P006", "Mary", "06/06/2020", "Cancer", "Admitted");
+    // patientDataTemp[0] = PatientData("P001", "John", "01/01/2020", "Fever", "Admitted");
+    // patientDataTemp[1] = PatientData("P002", "Mary", "02/02/2020", "Cancer", "Admitted");
+    // patientDataTemp[2] = PatientData("P003", "Peter", "03/03/2020", "Heart", "Admitted");
+    // patientDataTemp[3] = PatientData("P004", "Linda", "04/04/2020", "Stomach", "Admitted");
+    // patientDataTemp[4] = PatientData("P005", "John", "05/05/2020", "Fever", "Admitted");
+    // patientDataTemp[5] = PatientData("P006", "Mary", "06/06/2020", "Cancer", "Admitted");
+    
     HospitalData *hospitalData = new HospitalData();
 
     while(isRunning){
