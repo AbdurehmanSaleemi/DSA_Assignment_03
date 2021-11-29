@@ -35,6 +35,14 @@ public:
         this->status = status;
     }
 
+    void editPatientData(string patientId, string name, string admissionDate, string diseaseDiagnosis, string status){
+        this->patientId = patientId;
+        this->name = name;
+        this->admissionDate = admissionDate;
+        this->diseaseDiagnosis = diseaseDiagnosis;
+        this->status = status;
+    }
+
     string getPatientId(){
         return patientId;
     }
@@ -90,21 +98,6 @@ private:
         return node;
     }
 
-    TNode* searchPatient(TNode* node, string patientId){
-        if(node == NULL){
-            return NULL;
-        }
-        if(patientId < node->data.getPatientId()){
-            return searchPatient(node->left, patientId);
-        }
-        else if(patientId > node->data.getPatientId()){
-            return searchPatient(node->right, patientId);
-        }
-        else{
-            return node;
-        }
-    }
-
     //left rotation
     TNode* leftRotate(TNode* node){
         TNode *temp = node->right;
@@ -139,7 +132,7 @@ private:
         }
         return node;
     }
-
+    
     // delete the patient record
     TNode* deletePatient(TNode* node, string patientId){
         if(node == NULL){
@@ -198,15 +191,6 @@ public:
         root = addPatient(root, data);
         size++;
     }
-    void searchPatient(string patientId){
-        TNode *node = searchPatient(root, patientId);
-        if(node == NULL){
-            cout << "\t\n Patient not found!\n";
-        }
-        else{
-            node->data.print();
-        }
-    }
 
     void searchAndMoveUp(string patientId){
         root = searchAndMoveUp(this->root, patientId);
@@ -226,8 +210,8 @@ public:
 
 
 int main(){
-    PatientData patientData;
     PatientData patientDataTemp[10];
+    bool isRunning = true;
 
     patientDataTemp[0] = PatientData("P001", "John", "01/01/2020", "Fever", "Admitted");
     patientDataTemp[1] = PatientData("P002", "Mary", "02/02/2020", "Cancer", "Admitted");
@@ -237,10 +221,75 @@ int main(){
     patientDataTemp[5] = PatientData("P006", "Mary", "06/06/2020", "Cancer", "Admitted");
     HospitalData *hospitalData = new HospitalData();
 
-    for(int i = 0; i < 5; i++){
-        hospitalData->addPatient(patientDataTemp[i]);
+    while(isRunning){
+        cout << "1. Add Patient Record \n";
+        cout << "2. Search and Move Up \n";
+        cout << "3. Edit Patient Record\n";
+        cout << "4. Print Inorder \n";
+        cout << "5. Delete Patient Record \n";
+        cout << "6. Exit \n";
+        cout << "Enter your choice: ";
+        int choice;
+        cin >> choice;
+        if(choice == 1){
+            cout << "Enter Patient Id: ";
+            string patientId;
+            cin >> patientId;
+            cout << "Enter Patient Name: ";
+            string name;
+            cin >> name;
+            cout << "Enter Patient Admission Date: ";
+            string admissionDate;
+            cin >> admissionDate;
+            cout << "Enter Patient Disease Diagnosis: ";
+            string diseaseDiagnosis;
+            cin >> diseaseDiagnosis;
+            cout << "Enter Patient Status: ";
+            string status;
+            cin >> status;
+            PatientData patientData = PatientData(patientId, name, admissionDate, diseaseDiagnosis, status);
+            hospitalData->addPatient(patientData);
+        }
+        else if(choice == 2){
+            cout << "Enter Patient Id: ";
+            string patientId;
+            cin >> patientId;
+            hospitalData->searchAndMoveUp(patientId);
+        }
+        else if(choice == 3){
+            cout << "Enter Patient Id: ";
+            string patientId;
+            cin >> patientId;
+            cout << "Enter Patient Name: ";
+            string name;
+            cin >> name;
+            cout << "Enter Patient Admission Date: ";
+            string admissionDate;
+            cin >> admissionDate;
+            cout << "Enter Patient Disease Diagnosis: ";
+            string diseaseDiagnosis;
+            cin >> diseaseDiagnosis;
+            cout << "Enter Patient Status: ";
+            string status;
+            cin >> status;
+            PatientData patientData = PatientData(patientId, name, admissionDate, diseaseDiagnosis, status);
+            hospitalData->searchAndMoveUp(patientId);
+            hospitalData->addPatient(patientData);
+        }
+        else if(choice == 4){
+            hospitalData->printInorder();
+        }
+        else if(choice == 5){
+            cout << "Enter Patient Id: ";
+            string patientId;
+            cin >> patientId;
+            hospitalData->deletePatient(patientId);
+        }
+        else if(choice == 6){
+            isRunning = false;
+        }
+        else{
+            cout << "Invalid Choice! \n";
+        }
     }
-    hospitalData->printInorder();
-    hospitalData->searchAndMoveUp("P002");
-    hospitalData->printInorder();
 }
