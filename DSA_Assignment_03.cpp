@@ -51,12 +51,13 @@ public:
     }
 
     void print(){
-        cout << "\t\n --- Patient Record --- \n";
-        cout << "\t" << patientId << endl;
-        cout << "\t" << name << endl;
-        cout << "\t" << admissionDate << endl;
-        cout << "\t" << diseaseDiagnosis << endl;
-        cout << "\t" << status << endl;
+        cout << "\t\n ------------ Patient Record ----------- \n";
+        cout << patientId << endl;
+        cout << name << endl;
+        cout << admissionDate << endl;
+        cout << diseaseDiagnosis << endl;
+        cout << status << endl;
+        cout << "------------------------------------ \n";
     }
 };
 
@@ -104,6 +105,89 @@ private:
         }
     }
 
+    //left rotation
+    TNode* leftRotate(TNode* node){
+        TNode *temp = node->right;
+        node->right = temp->left;
+        temp->left = node;
+        return temp;
+    }
+    //right rotation
+    TNode* rightRotate(TNode* node){
+        TNode *temp = node->left;
+        node->left = temp->right;
+        temp->right = node;
+        return temp;
+    }
+
+    // Search a patient record and move its level up
+    TNode* searchAndMoveUp(TNode* node, string patientId){
+        if(node == NULL){
+            return NULL;
+        }
+        if(patientId < node->data.getPatientId()){
+            node->left = searchAndMoveUp(node->left, patientId);
+            if(node->left != NULL && node->left->data.getPatientId() < node->data.getPatientId()){
+                node = rightRotate(node);
+            }
+        }
+        else if(patientId > node->data.getPatientId()){
+            node->right = searchAndMoveUp(node->right, patientId);
+            if(node->right != NULL && node->right->data.getPatientId() > node->data.getPatientId()){
+                node = leftRotate(node);
+            }
+        }
+        return node;
+    }
+
+    // delete the patient record
+    TNode* deletePatient(TNode* node, string patientId){
+        if(node == NULL){
+            return NULL;
+        }
+        if(patientId < node->data.getPatientId()){
+            node->left = deletePatient(node->left, patientId);
+        }
+        else if(patientId > node->data.getPatientId()){
+            node->right = deletePatient(node->right, patientId);
+        }
+        else{
+            if(node->left == NULL && node->right == NULL){
+                delete node;
+                node = NULL;
+            }
+            else if(node->left == NULL){
+                TNode *temp = node;
+                node = node->right;
+                delete temp;
+            }
+            else if(node->right == NULL){
+                TNode *temp = node;
+                node = node->left;
+                delete temp;
+            }
+            else{
+                TNode *temp = node->right;
+                while(temp->left != NULL){
+                    temp = temp->left;
+                }
+                node->data = temp->data;
+                node->right = deletePatient(node->right, temp->data.getPatientId());
+            }
+        }
+        return node;
+    }
+
+    // print the tree in inorder
+    void printInorder(TNode* node){
+        if(node == NULL){
+            return;
+        }
+        printInorder(node->left);
+        node->data.print();
+        printInorder(node->right);
+    }
+
 public:
     HospitalData(){
         root = NULL;
@@ -123,6 +207,21 @@ public:
             node->data.print();
         }
     }
+
+    void searchAndMoveUp(string patientId){
+        root = searchAndMoveUp(root, patientId);
+    }
+
+    void printInorder(){
+        cout << "\t\n ------------ Inorder Record ----------- \n";
+        printInorder(root);
+        cout << "------------------------------------ \n";
+    }
+
+    void deletePatient(string patientId){
+        root = deletePatient(root, patientId);
+        size--;
+    }
 };
 
 
@@ -140,6 +239,11 @@ int main(){
     {
         hos.addPatient(pat[i]);
     }
+    //hos.searchPatient("0");
+    //hos.searchPatient("4");
+    hos.searchAndMoveUp("1");
     hos.searchPatient("0");
-    hos.searchPatient("1");
+    hos.printInorder();
+    hos.deletePatient("0");
+    hos.printInorder();
 }
